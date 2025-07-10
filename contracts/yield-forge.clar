@@ -266,3 +266,4 @@
     min-stake-period: (var-get min-stake-period),
     reward-rate: (var-get reward-rate),
   }
+)
