@@ -216,3 +216,53 @@
     (ok true)
   )
 )
+
+;; ANALYTICS & REPORTING INTERFACE
+
+;; Retrieve individual staking position details
+(define-read-only (get-stake-info (staker principal))
+  (map-get? stakes { staker: staker })
+)
+
+;; Get lifetime reward distribution for user
+(define-read-only (get-rewards-claimed (staker principal))
+  (map-get? rewards-claimed { staker: staker })
+)
+
+;; Current protocol yield rate
+(define-read-only (get-reward-rate)
+  (var-get reward-rate)
+)
+
+;; Minimum commitment period requirement
+(define-read-only (get-min-stake-period)
+  (var-get min-stake-period)
+)
+
+;; Available treasury balance for rewards
+(define-read-only (get-reward-pool)
+  (var-get reward-pool)
+)
+
+;; Total value locked across all positions
+(define-read-only (get-total-staked)
+  (var-get total-staked)
+)
+
+;; Calculate current annualized percentage yield
+(define-read-only (get-current-apy)
+  (let ((rate-basis (var-get reward-rate)))
+    ;; Convert basis points to percentage representation
+    (* rate-basis u100)
+  )
+)
+
+;; Comprehensive protocol performance metrics
+(define-read-only (get-protocol-stats)
+  {
+    total-staked: (var-get total-staked),
+    reward-pool: (var-get reward-pool),
+    current-apy: (get-current-apy),
+    min-stake-period: (var-get min-stake-period),
+    reward-rate: (var-get reward-rate),
+  }
